@@ -1,0 +1,27 @@
+{
+  "name": "liverpool-e2e-challenge",
+  "version": "1.0.0",
+  "description": "Playwright framework: Liverpool search flow with UI + network cross-validation",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:unit": "playwright test --project=unit",
+    "test:e2e": "playwright test --project=chrome",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "playwright",
+    "e2e",
+    "typescript"
+  ],
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2"
+  }
+}
