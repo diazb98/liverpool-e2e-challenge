@@ -31,11 +31,26 @@ export class SearchResultsPage extends BasePage {
       .filter({ hasText: new RegExp(`^\\s*${label}`, 'i') });
     await expect(option, `Color filter "${label}" must be offered`).toHaveCount(1);
 
-    const [response] = await Promise.all([
-      this.page.waitForResponse(isSearchApiResponse()),
-      option.click(),
-    ]);
-    await expect(option.locator('input')).toBeChecked();
+    await this.dismissCookieNotice();
+    const checkbox = option.locator('input');
+    const filterId = (await checkbox.getAttribute('value')) ?? label;
+
+    // Clicks made before the page hydrates are silently lost (observed on Firefox and, rarely, Chrome
+    // in CI). Retry until the filter is really applied. Only click when unchecked, so a retry can
+    // never toggle the filter back off, and only accept the XHR whose request carries this filter
+    // (not a stray background call to the same endpoint).
+    let response: Response | undefined;
+    await expect(async () => {
+      if (!(await checkbox.isChecked())) {
+        [response] = await Promise.all([
+          this.page.waitForResponse(isSearchApiResponse(filterId), { timeout: 8_000 }),
+          option.click({ timeout: 5_000 }),
+        ]);
+      }
+      await expect(checkbox).toBeChecked({ timeout: 3_000 });
+    }).toPass({ timeout: 40_000 });
+
+    if (!response) throw new Error(`No search response captured after applying filter "${label}"`);
     return response;
   }
 

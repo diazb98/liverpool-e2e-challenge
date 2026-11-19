@@ -23,6 +23,15 @@ export class BasePage {
     );
   }
 
+  /**
+   * Closes the cookie notice (close button, not "accept") so it can't overlap the page bottom
+   * where filters live. Best effort: the notice is not always rendered.
+   */
+  async dismissCookieNotice(): Promise<void> {
+    const close = this.page.getByTestId('ml-cookie-consent-ml-cookie-consent-close-button');
+    if (await close.isVisible()) await close.click({ timeout: 3_000 }).catch(() => undefined);
+  }
+
   private async isBlocked(): Promise<boolean> {
     return /access denied/i.test(await this.page.title());
   }
