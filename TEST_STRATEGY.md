@@ -7,7 +7,7 @@
 - **Checkout, payment, login/OTP.** Gateways, 3DS and anti-fraud are non-deterministic, and tests must not create real orders on production. Use contract tests and a staging environment.
 - **Exact catalogue/ranking.** Prices and stock change daily, so I assert *properties* (sorted ascending, UI = response, ≥3 of 5 present), never "the cheapest PS5 costs $X".
 - **Pixel-perfect visual regression of the results page.** Rotating banners, prices and facet counters make full-page diffs noise. The visual test masks all dynamic regions and compares only the page *structure*, with Linux/CI baselines (fonts render differently per OS); I would not gate on it.
-- **Full cross-browser on production.** The WAF already rejects non-Chrome fingerprints. It is supported (`BROWSERS=chrome,firefox,webkit`) but off by default.
+- **Cross-browser on every run.** Chrome, Firefox and WebKit all pass in CI (verified), but it triples traffic against a third-party production site, so default is Chrome only; the full matrix is `BROWSERS=chrome,firefox,webkit` (nightly/on demand).
 
 ## 2. If a CAPTCHA were added to search
 
@@ -18,7 +18,7 @@ I would not solve or bypass it from the test. In order of preference: (1) run wh
 | Risk (all observed while building) | Mitigation |
 |---|---|
 | WAF returns "Access Denied" to bundled headless Chromium, and sometimes to cold sessions | Real Chrome (`channel: 'chrome'`); bounded retry with backoff; explicit error if it persists |
-| Hydration race: text typed before React hydrates is wiped | Idempotent fill+Enter inside `expect().toPass()` until the URL changes |
+| Hydration race: text typed or clicks made before React hydrates are lost (hit on Firefox in CI, rarely Chrome) | Idempotent retries in `expect().toPass()`: fill+Enter until the URL changes; click the color filter only if unchecked, accepting only the XHR that carries that filter |
 | Reading the *filter* response instead of the *sort* response | `waitForResponse` matched on request body (`sortOption`); test waits until the DOM's first card equals the response's first product |
 | Fixed sleeps | None for UI sync, only web-first assertions and response/URL waits |
 | Price markup differs with/without discount; facets depend on term ("Blanco" absent for Nintendo Switch) | Page object handles both; unit tests on price parsing; color is data and a missing facet fails with a clear message |
