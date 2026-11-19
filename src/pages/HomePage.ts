@@ -8,7 +8,9 @@ export class HomePage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.searchInput = page.locator('input[placeholder^="Buscar por producto"]:visible').first();
+    this.searchInput = page
+      .locator(`input[placeholder^="${settings.ui.searchPlaceholder}"]:visible`)
+      .first();
   }
 
   async goto(): Promise<void> {

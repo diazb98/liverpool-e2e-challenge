@@ -8,6 +8,8 @@ test(`performance: results for "${term}" visible within budget`, async ({ page, 
   await resultsPage.gotoSearch(term); // includes first product card visible
   const visibleMs = Date.now() - start;
 
+  // loadEventEnd is 0 until the load event has finished, so wait for it before reading timings.
+  await page.waitForLoadState('load');
   const nav = await page.evaluate(() => {
     const [entry] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
     return { domContentLoaded: Math.round(entry.domContentLoadedEventEnd), load: Math.round(entry.loadEventEnd) };

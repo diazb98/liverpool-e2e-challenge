@@ -11,7 +11,7 @@ export class SearchResultsPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.cards = page.locator('section[data-testid$="-card"]');
-    this.sortButton = page.getByText('Ordenar por:').first();
+    this.sortButton = page.getByText(settings.ui.sortDropdown).first();
   }
 
   async gotoSearch(term: string): Promise<void> {

@@ -19,6 +19,12 @@ export const settings = {
   /** Sort option as exposed by the site (label shown in UI + id sent to the API). */
   sort: { label: 'Menor precio', id: 'sortPrice|0' },
 
+  /** Site copy (Spanish) used to locate elements. Kept here so a copy change is a one-line fix. */
+  ui: {
+    searchPlaceholder: 'Buscar por producto',
+    sortDropdown: 'Ordenar por:',
+  },
+
   /** Retries for the bot-protection "Access Denied" page. */
   accessDeniedRetries: num(process.env.ACCESS_DENIED_RETRIES, 4),
 

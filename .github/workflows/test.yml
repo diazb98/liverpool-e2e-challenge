@@ -5,6 +5,15 @@ on:
     branches: [main, master]
   pull_request:
   workflow_dispatch:
+    inputs:
+      update_snapshots:
+        description: 'Regenerate visual baselines (uploaded as the "visual-baselines" artifact)'
+        type: boolean
+        default: false
+      browsers:
+        description: 'Comma separated: chrome,firefox,webkit'
+        type: string
+        default: 'chrome'
 
 concurrency:
   group: tests-${{ github.ref }}
@@ -16,6 +25,7 @@ jobs:
     timeout-minutes: 15
     env:
       CI: 'true'
+      BROWSERS: ${{ inputs.browsers || 'chrome' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -28,14 +38,25 @@ jobs:
         run: npm ci
 
       # Real Google Chrome: the site's bot protection rejects Playwright's bundled headless Chromium.
-      - name: Install Chrome
-        run: npx playwright install --with-deps chrome
+      - name: Install browsers
+        run: |
+          npx playwright install --with-deps chrome
+          if [[ "$BROWSERS" == *firefox* ]]; then npx playwright install --with-deps firefox; fi
+          if [[ "$BROWSERS" == *webkit* ]]; then npx playwright install --with-deps webkit; fi
 
       - name: Type check
         run: npm run typecheck
 
       - name: Run tests (headless)
-        run: npx playwright test
+        run: npx playwright test ${{ inputs.update_snapshots && '--update-snapshots' || '' }}
+
+      - name: Upload visual baselines
+        if: inputs.update_snapshots && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines
+          path: tests/visual.spec.ts-snapshots/
+          if-no-files-found: warn
 
       - name: Upload HTML report
         if: always()
