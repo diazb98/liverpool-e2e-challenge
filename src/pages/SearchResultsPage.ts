@@ -15,7 +15,7 @@ export class SearchResultsPage extends BasePage {
   }
 
   async gotoSearch(term: string): Promise<void> {
-    await this.open(`/tienda?s=${encodeURIComponent(term)}`);
+    await this.open(`${settings.searchPath}?s=${encodeURIComponent(term)}`);
     await this.waitForResults();
   }
 

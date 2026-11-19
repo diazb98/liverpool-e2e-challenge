@@ -41,7 +41,7 @@ Headless is the default (`headless: true` in `playwright.config.ts`); `--headed`
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `SEARCH_TERM` | from `data/search-cases.json` | Any search term, no code changes |
+| `SEARCH_TERM` | all cases in `data/search-cases.json` (playstation 5, xbox series x, nintendo switch) | Run a single arbitrary term, no code changes |
 | `SEARCH_COLOR` | `White` | Color facet to apply (must exist for that term, e.g. Nintendo Switch has Black/Red but no White) |
 | `TOP_N` / `MIN_MATCHES` | `5` / `3` | Products extracted / minimum found in the response |
 | `PERF_BUDGET_MS` | `15000` | Performance budget for the results page |
@@ -66,13 +66,16 @@ PowerShell: `$env:SEARCH_TERM="xbox series x"; npx playwright test`
 ## Layout
 
 ```
-src/config/settings.ts      all tunables + data-driven cases
+src/config/settings.ts      all tunables, site copy, data-driven cases loader
 src/pages/                  BasePage (anti-bot retry), HomePage, SearchResultsPage
 src/api/searchApi.ts        response types, interception predicate, parsing
 src/utils/validation.ts     pure UI-vs-response cross-validation (unit tested)
-tests/search.spec.ts        main flow (parts 1 + 2)
+data/search-cases.json      search term + color cases (add a line to add a case)
+tests/fixtures.ts           page-object fixtures
+tests/search.spec.ts        main flow, one test per case (parts 1 + 2)
 tests/accessibility.spec.ts axe-core scan (bonus)
 tests/performance.spec.ts   load-time budget (bonus)
+tests/visual.spec.ts        layout screenshot comparison (bonus, Chrome/Linux)
 tests/unit/                 validation unit tests
 TEST_STRATEGY.md            test strategy document
 ```

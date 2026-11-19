@@ -1,3 +1,5 @@
 [
-  { "term": "playstation 5", "color": "White" }
+  { "term": "playstation 5", "color": "White" },
+  { "term": "xbox series x", "color": "White" },
+  { "term": "nintendo switch", "color": "Black" }
 ]

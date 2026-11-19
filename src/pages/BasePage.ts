@@ -28,7 +28,7 @@ export class BasePage {
    * where filters live. Best effort: the notice is not always rendered.
    */
   async dismissCookieNotice(): Promise<void> {
-    const close = this.page.getByTestId('ml-cookie-consent-ml-cookie-consent-close-button');
+    const close = this.page.getByTestId(settings.testIds.cookieNoticeClose);
     if (await close.isVisible()) await close.click({ timeout: 3_000 }).catch(() => undefined);
   }
 

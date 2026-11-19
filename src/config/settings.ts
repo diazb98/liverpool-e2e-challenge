@@ -9,6 +9,8 @@ const num = (value: string | undefined, fallback: number): number => {
 export const settings = {
   baseUrl: process.env.BASE_URL ?? 'https://www.liverpool.com.mx',
   homePath: '/tienda/home',
+  /** Direct search URL: `${searchPath}?s=<term>`. */
+  searchPath: '/tienda',
   searchApiPath: '/api/plp/search',
 
   /** How many products are extracted from the UI and cross-validated. */
@@ -23,6 +25,11 @@ export const settings = {
   ui: {
     searchPlaceholder: 'Buscar por producto',
     sortDropdown: 'Ordenar por:',
+  },
+
+  /** Stable test ids used by the site. */
+  testIds: {
+    cookieNoticeClose: 'ml-cookie-consent-ml-cookie-consent-close-button',
   },
 
   /** Retries for the bot-protection "Access Denied" page. */
