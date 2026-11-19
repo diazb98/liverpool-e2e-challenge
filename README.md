@@ -2,7 +2,9 @@
 
 Automates the Liverpool search flow and cross-validates the UI against the network response the frontend consumes.
 
-**CI status:** ![Tests](https://github.com/<OWNER>/<REPO>/actions/workflows/test.yml/badge.svg) — _replace `<OWNER>/<REPO>` after pushing, and link a passing run here._
+**CI status:** [![Tests](https://github.com/diazb98/liverpool-e2e-challenge/actions/workflows/test.yml/badge.svg)](https://github.com/diazb98/liverpool-e2e-challenge/actions/workflows/test.yml)
+
+Passing run: https://github.com/diazb98/liverpool-e2e-challenge/actions/runs/44625220166 (11 tests passed headless; HTML report uploaded as the `playwright-report` artifact).
 
 ## What it does
 
