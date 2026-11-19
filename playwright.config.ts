@@ -12,7 +12,7 @@ const requested = (process.env.BROWSERS ?? 'chrome').split(',').map((b) => b.tri
 const browserProjects: Record<string, Project> = {
   chrome: { name: 'chrome', use: { ...devices['Desktop Chrome'], channel: 'chrome' }, testIgnore: /unit\// },
   firefox: { name: 'firefox', use: { ...devices['Desktop Firefox'] }, testIgnore: /unit\// },
-  webkit: { name: 'webkit', use: { ...devices['Desktop Safari'] }, testIgnore: /unit\// },
+  edge: { name: 'edge', use: { ...devices['Desktop Edge'], channel: 'msedge' }, testIgnore: /unit\// },
 };
 
 export default defineConfig({

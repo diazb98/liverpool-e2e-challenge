@@ -7,7 +7,9 @@ const { term } = getSearchCases()[0];
 // so comparing a Windows/macOS render against them would fail for reasons that are not regressions.
 // Regenerate with the "update_snapshots" input of the Tests workflow (see README).
 test.skip(process.platform !== 'linux', 'Visual baselines are Linux-only (CI)');
-test.skip(({ browserName }) => browserName !== 'chromium', 'Visual baselines are Chrome-only');
+test.beforeEach(({}, testInfo) => {
+  test.skip(testInfo.project.name !== 'chrome', 'Visual baselines are Chrome-only');
+});
 
 test(`visual: layout of search results for "${term}"`, async ({ page, resultsPage }) => {
   await resultsPage.gotoSearch(term);

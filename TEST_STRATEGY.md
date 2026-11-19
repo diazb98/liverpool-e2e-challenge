@@ -7,7 +7,7 @@
 - **Checkout, payment, login/OTP.** Gateways, 3DS and anti-fraud are non-deterministic, and tests must not create real orders on production. Use contract tests and a staging environment.
 - **Exact catalogue/ranking.** Prices and stock change daily, so I assert *properties* (sorted ascending, UI = response, ≥3 of 5 present), never "the cheapest PS5 costs $X".
 - **Pixel-perfect visual regression of the results page.** Rotating banners, prices and facet counters make full-page diffs noise. The visual test masks all dynamic regions and compares only the page *structure*, with Linux/CI baselines (fonts render differently per OS); I would not gate on it.
-- **Cross-browser on every run.** Chrome, Firefox and WebKit all pass in CI (verified), but it triples traffic against a third-party production site, so default is Chrome only; the full matrix is `BROWSERS=chrome,firefox,webkit` (nightly/on demand).
+- **Cross-browser on every run.** It triples traffic against a third-party production site, so default is Chrome only; the full matrix is `BROWSERS=chrome,firefox,edge` (nightly/on demand).
 
 ## 2. If a CAPTCHA were added to search
 

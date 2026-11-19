@@ -11,7 +11,7 @@ on:
         type: boolean
         default: false
       browsers:
-        description: 'Comma separated: chrome,firefox,webkit'
+        description: 'Comma separated: chrome,firefox,edge'
         type: string
         default: 'chrome'
 
@@ -42,7 +42,7 @@ jobs:
         run: |
           npx playwright install --with-deps chrome
           if [[ "$BROWSERS" == *firefox* ]]; then npx playwright install --with-deps firefox; fi
-          if [[ "$BROWSERS" == *webkit* ]]; then npx playwright install --with-deps webkit; fi
+          if [[ "$BROWSERS" == *edge* ]]; then npx playwright install --with-deps msedge; fi
 
       - name: Type check
         run: npm run typecheck

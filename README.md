@@ -45,7 +45,7 @@ Headless is the default (`headless: true` in `playwright.config.ts`); `--headed`
 | `TOP_N` / `MIN_MATCHES` | `5` / `3` | Products extracted / minimum found in the response |
 | `PERF_BUDGET_MS` | `15000` | Performance budget for the results page |
 | `A11Y_STRICT` | `false` | `true` makes serious/critical axe violations fail the test |
-| `BROWSERS` | `chrome` | e.g. `chrome,firefox,webkit` runs the suite in parallel across browsers (all three pass in CI; the visual test is Chrome-only). In CI, use *Run workflow* → `browsers` input |
+| `BROWSERS` | `chrome` | e.g. `chrome,firefox,edge` runs the suite in parallel across browsers (the visual test is Chrome-only). In CI, use *Run workflow* → `browsers` input |
 | `BASE_URL` | `https://www.liverpool.com.mx` | Target site |
 
 Examples (bash):
