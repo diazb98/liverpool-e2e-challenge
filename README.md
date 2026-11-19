@@ -4,7 +4,8 @@ Automates the Liverpool search flow and cross-validates the UI against the netwo
 
 **CI status:** [![Tests](https://github.com/diazb98/liverpool-e2e-challenge/actions/workflows/test.yml/badge.svg)](https://github.com/diazb98/liverpool-e2e-challenge/actions/workflows/test.yml)
 
-Passing run: https://github.com/diazb98/liverpool-e2e-challenge/actions/runs/44625220166 (11 tests passed headless; HTML report uploaded as the `playwright-report` artifact).
+Passing run: https://github.com/diazb98/liverpool-e2e-challenge/actions/runs/44628681558 (12 tests passed headless on Chrome; HTML report uploaded as the `playwright-report` artifact).
+Chrome + Firefox + Edge run: https://github.com/diazb98/liverpool-e2e-challenge/actions/runs/44628437316 (18 passed, 2 skipped: the Chrome-only visual test).
 
 ## What it does
 
