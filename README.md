@@ -79,4 +79,4 @@ TEST_STRATEGY.md            test strategy document
 ## Notes
 
 - UI "price" is `priceInfo.promoPrice.price` in the response (the crossed-out price is `listPrice`).
-- Visual regression is intentionally not included; see `TEST_STRATEGY.md`.
+- **Visual regression** (`tests/visual.spec.ts`) compares the page layout with dynamic regions masked. Baselines are Linux/Chrome renders produced in CI, so the test is skipped on other OSes. To regenerate them: Actions → Tests → *Run workflow* → tick `update_snapshots`, download the `visual-baselines` artifact into `tests/visual.spec.ts-snapshots/` and commit.
