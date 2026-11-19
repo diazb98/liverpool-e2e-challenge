@@ -1,56 +1,56 @@
-# Liverpool E2E challenge (Playwright + TypeScript)
+# Reto técnico E2E de Liverpool (Playwright + TypeScript)
 
-Automates the Liverpool search flow and cross-validates the UI against the network response the frontend consumes.
+Automatiza el flujo de búsqueda de Liverpool y valida de forma cruzada la UI contra la respuesta de red que consume el frontend.
 
-**CI status:** [![Tests](https://github.com/diazb98/liverpool-e2e-challenge/actions/workflows/test.yml/badge.svg)](https://github.com/diazb98/liverpool-e2e-challenge/actions/workflows/test.yml)
+**Estado del CI:** [![Tests](https://github.com/diazb98/liverpool-e2e-challenge/actions/workflows/test.yml/badge.svg)](https://github.com/diazb98/liverpool-e2e-challenge/actions/workflows/test.yml)
 
-Passing run: https://github.com/diazb98/liverpool-e2e-challenge/actions/runs/44630568344 (14 tests passed headless on Chrome; HTML report uploaded as the `playwright-report` artifact).
+Ejecución en verde: https://github.com/diazb98/liverpool-e2e-challenge/actions/runs/44630568344 (14 pruebas pasaron en headless con Chrome; el reporte HTML se sube como artifact `playwright-report`).
 
-Chrome + Firefox + Edge run: https://github.com/diazb98/liverpool-e2e-challenge/actions/runs/44630826464 (24 passed, 2 skipped: the Chrome-only visual test).
+Ejecución con Chrome + Firefox + Edge: https://github.com/diazb98/liverpool-e2e-challenge/actions/runs/44630826464 (24 pasaron, 2 omitidas: la prueba visual, que es solo de Chrome).
 
-## What it does
+## Qué hace
 
-1. Opens Liverpool, searches **"playstation 5"**, filters color **White** (the site calls it *Blanco*), sorts by **lowest price**.
-2. Extracts name + price of the first 5 results and prints them.
-3. Intercepts the `POST /api/plp/search` response behind the sorted results, and asserts ≥ 3 of the 5 UI products are in it. Name/price differences, and ordering, are logged and attached to the report.
+1. Abre Liverpool, busca **"playstation 5"**, filtra por color **White** (el sitio lo llama *Blanco*) y ordena por **menor precio**.
+2. Extrae el nombre y el precio de los 5 primeros resultados y los imprime en consola.
+3. Intercepta la respuesta de `POST /api/plp/search` que alimenta los resultados ordenados y afirma que al menos 3 de los 5 productos de la UI están en ella. Las diferencias de nombre, precio y orden se registran y se adjuntan al reporte.
 
-## Requirements
+## Requisitos
 
-- Node.js 20+ (tested on 22/26)
-- **Google Chrome installed.** Liverpool's bot protection rejects Playwright's bundled headless Chromium ("Access Denied"), so tests use the real Chrome channel. In CI this is installed by the workflow.
+- Node.js 20 o superior (probado con 22 y 26).
+- **Google Chrome instalado.** La protección anti-bot de Liverpool rechaza el Chromium headless que trae Playwright ("Access Denied"), por eso las pruebas usan el canal de Chrome real. En CI lo instala el propio workflow.
 
-## Install
+## Instalación
 
 ```bash
 npm ci
-npx playwright install chrome   # only if Chrome is not already installed
+npx playwright install chrome   # solo si Chrome no está instalado
 ```
 
-## Run
+## Ejecución
 
 ```bash
-npm test                 # everything, headless (default)
-npm run test:headed      # visible browser
-npm run test:e2e         # browser tests only
-npm run test:unit        # fast unit tests of the validation layer (no browser)
-npm run report           # open the HTML report
+npm test                 # todo, en headless (por defecto)
+npm run test:headed      # con el navegador visible
+npm run test:e2e         # solo las pruebas con navegador
+npm run test:unit        # pruebas unitarias rápidas de la capa de validación (sin navegador)
+npm run report           # abre el reporte HTML
 ```
 
-Headless is the default (`headless: true` in `playwright.config.ts`); `--headed` (the `test:headed` script) overrides it.
+Headless es el modo por defecto (`headless: true` en `playwright.config.ts`); `--headed` (el script `test:headed`) lo sustituye.
 
-### Data-driven / configuration
+### Datos y configuración
 
-| Variable | Default | Purpose |
+| Variable | Valor por defecto | Para qué sirve |
 |---|---|---|
-| `SEARCH_TERM` | all cases in `data/search-cases.json` (playstation 5, xbox series x, nintendo switch) | Run a single arbitrary term, no code changes |
-| `SEARCH_COLOR` | `White` | Color facet to apply (must exist for that term, e.g. Nintendo Switch has Black/Red but no White) |
-| `TOP_N` / `MIN_MATCHES` | `5` / `3` | Products extracted / minimum found in the response |
-| `PERF_BUDGET_MS` | `15000` | Performance budget for the results page |
-| `A11Y_STRICT` | `false` | `true` makes serious/critical axe violations fail the test |
-| `BROWSERS` | `chrome` | e.g. `chrome,firefox,edge` runs the suite in parallel across browsers (the visual test is Chrome-only). In CI, use *Run workflow* → `browsers` input |
-| `BASE_URL` | `https://www.liverpool.com.mx` | Target site |
+| `SEARCH_TERM` | todos los casos de `data/search-cases.json` (playstation 5, xbox series x, nintendo switch) | Ejecuta un único término cualquiera, sin tocar el código |
+| `SEARCH_COLOR` | `White` | Color a filtrar (debe existir para ese término; por ejemplo, Nintendo Switch ofrece Black y Red, pero no White) |
+| `TOP_N` / `MIN_MATCHES` | `5` / `3` | Productos extraídos / mínimo que debe aparecer en la respuesta |
+| `PERF_BUDGET_MS` | `15000` | Presupuesto de rendimiento de la página de resultados |
+| `A11Y_STRICT` | `false` | Con `true`, las violaciones serias o críticas de axe hacen fallar la prueba |
+| `BROWSERS` | `chrome` | Por ejemplo `chrome,firefox,edge` ejecuta la suite en paralelo entre navegadores (la prueba visual es solo de Chrome). En CI, usa *Run workflow* → entrada `browsers` |
+| `BASE_URL` | `https://www.liverpool.com.mx` | Sitio objetivo |
 
-Examples (bash):
+Ejemplo (bash):
 
 ```bash
 SEARCH_TERM="nintendo switch" SEARCH_COLOR=Black npx playwright test tests/search.spec.ts
@@ -58,30 +58,31 @@ SEARCH_TERM="nintendo switch" SEARCH_COLOR=Black npx playwright test tests/searc
 
 PowerShell: `$env:SEARCH_TERM="xbox series x"; npx playwright test`
 
-## Reporting
+## Reportes
 
-- HTML report: `playwright-report/` (`npm run report`). Each run attaches `ui-vs-response.json`.
-- Screenshots on failure and traces are configured in `playwright.config.ts` (`screenshot: 'only-on-failure'`, `trace: 'retain-on-failure'`), never in test code.
-- CI: `.github/workflows/test.yml` installs dependencies, runs headless, and uploads the HTML report as an artifact.
+- Reporte HTML: `playwright-report/` (`npm run report`). Cada ejecución adjunta `ui-vs-response.json`.
+- Los screenshots en fallo y las trazas se configuran en `playwright.config.ts` (`screenshot: 'only-on-failure'`, `trace: 'retain-on-failure'`), nunca en el código de las pruebas.
+- CI: `.github/workflows/test.yml` instala dependencias, ejecuta en headless y sube el reporte HTML como artifact.
 
-## Layout
+## Estructura
 
 ```
-src/config/settings.ts      all tunables, site copy, data-driven cases loader
-src/pages/                  BasePage (anti-bot retry), HomePage, SearchResultsPage
-src/api/searchApi.ts        response types, interception predicate, parsing
-src/utils/validation.ts     pure UI-vs-response cross-validation (unit tested)
-data/search-cases.json      search term + color cases (add a line to add a case)
-tests/fixtures.ts           page-object fixtures
-tests/search.spec.ts        main flow, one test per case (parts 1 + 2)
-tests/accessibility.spec.ts axe-core scan (bonus)
-tests/performance.spec.ts   load-time budget (bonus)
-tests/visual.spec.ts        layout screenshot comparison (bonus, Chrome/Linux)
-tests/unit/                 validation unit tests
-TEST_STRATEGY.md            test strategy document
+src/config/settings.ts      toda la configuración, textos del sitio y carga de casos de datos
+src/pages/                  BasePage (reintento anti-bot), HomePage, SearchResultsPage
+src/api/searchApi.ts        tipos de la respuesta, predicado de interceptación y parseo
+src/utils/validation.ts     validación cruzada UI contra respuesta, pura (con pruebas unitarias)
+data/search-cases.json      casos de término y color (agrega una línea para agregar un caso)
+tests/fixtures.ts           fixtures de los page objects
+tests/search.spec.ts        flujo principal, una prueba por caso (partes 1 y 2)
+tests/accessibility.spec.ts escaneo con axe-core (bonus)
+tests/performance.spec.ts   presupuesto de tiempo de carga (bonus)
+tests/visual.spec.ts        comparación de screenshot del layout (bonus, Chrome/Linux)
+tests/unit/                 pruebas unitarias de la validación
+TEST_STRATEGY.md            documento de estrategia de pruebas
+PROMPT.md                   prompt de referencia (reconstruido)
 ```
 
-## Notes
+## Notas
 
-- UI "price" is `priceInfo.promoPrice.price` in the response (the crossed-out price is `listPrice`).
-- **Visual regression** (`tests/visual.spec.ts`) compares the page layout with dynamic regions masked. Baselines are Linux/Chrome renders produced in CI, so the test is skipped on other OSes. To regenerate them: Actions → Tests → *Run workflow* → tick `update_snapshots`, download the `visual-baselines` artifact into `tests/visual.spec.ts-snapshots/` and commit.
+- El "precio" de la UI corresponde a `priceInfo.promoPrice.price` en la respuesta (el precio tachado es `listPrice`).
+- La **regresión visual** (`tests/visual.spec.ts`) compara el layout de la página con las zonas dinámicas enmascaradas. Las baselines son renders de Chrome en Linux generados en CI, por lo que la prueba se omite en otros sistemas operativos. Para regenerarlas: Actions → Tests → *Run workflow* → marca `update_snapshots`, descarga el artifact `visual-baselines` en `tests/visual.spec.ts-snapshots/` y haz commit.
