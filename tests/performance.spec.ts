@@ -5,10 +5,10 @@ const { term } = getSearchCases()[0];
 
 test(`performance: results for "${term}" visible within budget`, async ({ page, resultsPage }) => {
   const start = Date.now();
-  await resultsPage.gotoSearch(term); // includes first product card visible
+  await resultsPage.gotoSearch(term); // incluye esperar a que se vea la primera tarjeta
   const visibleMs = Date.now() - start;
 
-  // loadEventEnd is 0 until the load event has finished, so wait for it before reading timings.
+  // loadEventEnd vale 0 hasta que termina el evento load, por eso se espera antes de leer los tiempos.
   await page.waitForLoadState('load');
   const nav = await page.evaluate(() => {
     const [entry] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];

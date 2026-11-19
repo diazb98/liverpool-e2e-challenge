@@ -5,17 +5,17 @@ export class BasePage {
   constructor(protected readonly page: Page) {}
 
   /**
-   * Navigates and retries when the CDN bot protection answers with "Access Denied".
-   * That page is served on cold sessions intermittently; a retry with the cookies it
-   * just set normally succeeds. If it never does we fail with an explicit message
-   * instead of a misleading "element not found" timeout later on.
+   * Navega y reintenta cuando la protección anti-bot del CDN responde "Access Denied".
+   * Esa página se sirve de forma intermitente en sesiones nuevas; un reintento con las cookies
+   * que acaba de recibir normalmente funciona. Si nunca funciona, falla con un mensaje explícito
+   * en lugar de un timeout engañoso de "elemento no encontrado" más adelante.
    */
   async open(path: string): Promise<void> {
     const url = new URL(path, settings.baseUrl).toString();
     for (let attempt = 1; attempt <= settings.accessDeniedRetries; attempt++) {
       await this.page.goto(url, { waitUntil: 'domcontentloaded' });
       if (!(await this.isBlocked())) return;
-      await this.page.waitForTimeout(1_000 * attempt); // linear backoff, not a UI wait
+      await this.page.waitForTimeout(1_000 * attempt); // backoff lineal, no es una espera de UI
     }
     throw new Error(
       `Blocked by bot protection ("Access Denied") on ${url} after ${settings.accessDeniedRetries} attempts. ` +
@@ -24,8 +24,8 @@ export class BasePage {
   }
 
   /**
-   * Closes the cookie notice (close button, not "accept") so it can't overlap the page bottom
-   * where filters live. Best effort: the notice is not always rendered.
+   * Cierra el aviso de cookies (botón de cerrar, no "aceptar") para que no tape la parte inferior
+   * de la página, donde están los filtros. Es un mejor esfuerzo: el aviso no siempre se muestra.
    */
   async dismissCookieNotice(): Promise<void> {
     const close = this.page.getByTestId(settings.testIds.cookieNoticeClose);

@@ -3,9 +3,10 @@ import { expect, test } from './fixtures';
 
 const { term } = getSearchCases()[0];
 
-// Baselines are rendered on Linux (the CI runner) with Chrome: font rasterisation differs per OS,
-// so comparing a Windows/macOS render against them would fail for reasons that are not regressions.
-// Regenerate with the "update_snapshots" input of the Tests workflow (see README).
+// Las baselines se generan en Linux (el runner de CI) con Chrome: el renderizado de fuentes cambia
+// según el sistema operativo, así que compararlas con un render de Windows/macOS fallaría por
+// motivos que no son regresiones.
+// Se regeneran con la entrada "update_snapshots" del workflow Tests (ver README).
 test.skip(process.platform !== 'linux', 'Visual baselines are Linux-only (CI)');
 test.beforeEach(({}, testInfo) => {
   test.skip(testInfo.project.name !== 'chrome', 'Visual baselines are Chrome-only');
@@ -14,13 +15,13 @@ test.beforeEach(({}, testInfo) => {
 test(`visual: layout of search results for "${term}"`, async ({ page, resultsPage }) => {
   await resultsPage.gotoSearch(term);
 
-  // Prices, stock, banners and facet counters change daily: mask them and compare the page
-  // *structure* (header, breadcrumb, sort bar, filter panel frame, grid layout).
+  // Precios, stock, banners y contadores de filtros cambian a diario: se enmascaran y se compara
+  // solo la *estructura* de la página (header, breadcrumb, barra de orden, marco de filtros, grid).
   const dynamic = [
     resultsPage.cards.first().locator('xpath=ancestor::div[contains(@class,"grid")][1]'),
     page.getByText(/\d[\d,]*\s+art[ií]culos/),
     page.locator('[data-testid="plp-page-plp-filter"]'),
-    page.locator('[class*="fixed"]'), // cookie banner and floating widgets
+    page.locator('[class*="fixed"]'), // banner de cookies y widgets flotantes
   ];
 
   await expect(page).toHaveScreenshot('search-results-layout.png', {

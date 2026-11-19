@@ -23,7 +23,7 @@ export class SearchResultsPage extends BasePage {
     await expect(this.cards.first()).toBeVisible();
   }
 
-  /** Ticks the color checkbox and returns the XHR response the frontend used to refresh results. */
+  /** Marca el checkbox de color y devuelve la respuesta XHR que usó el frontend para refrescar los resultados. */
   async filterByColor(color: string): Promise<Response> {
     const label = siteColorLabel(color);
     const option = this.page
@@ -35,10 +35,10 @@ export class SearchResultsPage extends BasePage {
     const checkbox = option.locator('input');
     const filterId = (await checkbox.getAttribute('value')) ?? label;
 
-    // Clicks made before the page hydrates are silently lost (observed on Firefox and, rarely, Chrome
-    // in CI). Retry until the filter is really applied. Only click when unchecked, so a retry can
-    // never toggle the filter back off, and only accept the XHR whose request carries this filter
-    // (not a stray background call to the same endpoint).
+    // Los clics hechos antes de que la página hidrate se pierden sin avisar (observado en Firefox y,
+    // rara vez, en Chrome en CI). Se reintenta hasta que el filtro quede realmente aplicado. Solo se
+    // hace clic si está sin marcar, para que un reintento nunca lo desactive, y solo se acepta el XHR
+    // cuya petición lleva este filtro (no una llamada de fondo al mismo endpoint).
     let response: Response | undefined;
     await expect(async () => {
       if (!(await checkbox.isChecked())) {
@@ -55,9 +55,9 @@ export class SearchResultsPage extends BasePage {
   }
 
   /**
-   * Sorts and returns the XHR response that carries the sorted results.
-   * The response is matched on the request body (sortOption) so we never
-   * grab the previous, unsorted filter response by mistake.
+   * Ordena y devuelve la respuesta XHR que trae los resultados ordenados.
+   * La respuesta se identifica por el cuerpo de la petición (sortOption) para no tomar
+   * por error la respuesta anterior del filtro, que aún no estaba ordenada.
    */
   async sortBy(sort = settings.sort): Promise<Response> {
     await this.sortButton.click();
@@ -69,7 +69,7 @@ export class SearchResultsPage extends BasePage {
     return response;
   }
 
-  /** Resolves once the DOM shows the same first product the API returned (UI is in sync with response). */
+  /** Se resuelve cuando el DOM muestra el mismo primer producto que devolvió el API (la UI está sincronizada con la respuesta). */
   async waitForFirstProduct(productId: string): Promise<void> {
     await expect(this.cards.first()).toHaveAttribute('data-testid', `${productId}-card`);
   }
@@ -81,8 +81,8 @@ export class SearchResultsPage extends BasePage {
       const card = this.cards.nth(i);
       const testId = (await card.getAttribute('data-testid')) ?? '';
       const name = (await card.locator('h3').first().innerText()).trim();
-      // Discounted items expose the current price in a "discounted" node (the "original" node is the
-      // crossed-out one). Items without discount render the price directly in the price container.
+      // Los productos con descuento muestran el precio vigente en un nodo "discounted" (el nodo
+      // "original" es el tachado). Los productos sin descuento muestran el precio directo en el contenedor.
       const priceBox = card.locator('[data-testid$="-price"]').first();
       const discounted = priceBox.locator('[data-testid="discounted"]');
       const priceNode = (await discounted.count()) > 0 ? discounted.first() : priceBox;

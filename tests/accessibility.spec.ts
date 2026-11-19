@@ -23,7 +23,7 @@ test(`a11y: axe scan of search results for "${term}"`, async ({ page, resultsPag
     contentType: 'application/json',
   });
 
-  // Third-party site: report by default, gate only when explicitly requested.
+  // Sitio de terceros: por defecto solo se reporta; falla únicamente si se pide de forma explícita.
   if (settings.a11yStrict) {
     const blocking = violations.filter((v) => v.impact === 'critical' || v.impact === 'serious');
     expect(blocking.map((v) => v.id), 'serious/critical a11y violations').toEqual([]);

@@ -20,7 +20,7 @@ for (const { term, color } of getSearchCases()) {
       await resultsPage.filterByColor(color);
     });
 
-    // The response consumed by the frontend for the final (filtered + sorted) state.
+    // La respuesta que consume el frontend para el estado final (filtrado y ordenado).
     const sortResponse = await test.step('Sort by price: lowest to highest (intercept results XHR)', () =>
       resultsPage.sortBy());
 
@@ -54,7 +54,7 @@ for (const { term, color } of getSearchCases()) {
         `${result.matched}/${result.total} UI products found in response (need ≥ ${settings.minMatches})`,
       ).toBeGreaterThanOrEqual(settings.minMatches);
 
-      // Stronger, non-blocking signals: consistency of data and ordering.
+      // Señales adicionales más estrictas (aserciones suaves): consistencia de datos y de orden.
       expect.soft(result.discrepancies.filter((d) => d.kind === 'price'), 'price discrepancies').toEqual([]);
       expect.soft(result.orderMatches, 'UI order equals response order').toBe(true);
       const prices = uiProducts.map((p) => p.price);

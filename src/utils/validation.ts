@@ -18,7 +18,7 @@ export interface ValidationResult {
   matched: number;
   total: number;
   discrepancies: Discrepancy[];
-  /** UI order (ids) vs the order the API returned them in. */
+  /** Orden de la UI (ids) frente al orden en que los devolvió el API. */
   orderMatches: boolean;
 }
 
@@ -32,7 +32,7 @@ export const normalizeName = (name: string): string =>
     .replace(/\s+/g, ' ')
     .trim();
 
-/** "$14,699.00", "$249 50", "$1,299" -> number. */
+/** "$14,699.00", "$249 50", "$1,299" -> número. */
 export function parsePrice(text: string): number {
   const match = text.match(/\$\s*([\d,]+)(?:\s*\.?\s*(\d{2}))?/);
   if (!match) throw new Error(`Cannot parse price from "${text}"`);
@@ -42,10 +42,10 @@ export function parsePrice(text: string): number {
 }
 
 /**
- * Cross-validates UI products against the intercepted response.
- * A product "appears" in the response when its id matches (preferred) or,
- * failing that, its normalized name matches. Same product with a different
- * name/price is still a match, but is reported as a discrepancy.
+ * Valida de forma cruzada los productos de la UI contra la respuesta interceptada.
+ * Un producto "aparece" en la respuesta si coincide su id (preferido) o, en su defecto,
+ * su nombre normalizado. Si es el mismo producto pero con otro nombre o precio, cuenta como
+ * coincidencia y además se reporta como discrepancia.
  */
 export function crossValidate(ui: UiProduct[], records: PlpRecord[]): ValidationResult {
   const byId = new Map(records.map((r) => [r.productId, r]));

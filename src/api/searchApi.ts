@@ -1,7 +1,7 @@
 import type { Response } from '@playwright/test';
 import { settings } from '../config/settings';
 
-/** Subset of the `POST /api/plp/search` payload that the frontend consumes. */
+/** Subconjunto de la respuesta de `POST /api/plp/search` que consume el frontend. */
 export interface PlpRecord {
   productId: string;
   title: string;
@@ -19,7 +19,7 @@ export interface PlpSearchResponse {
   };
 }
 
-/** Matches the frontend search/filter/sort XHR. Optionally requires a fragment in the request body. */
+/** Identifica el XHR de búsqueda, filtro u orden del frontend. Opcionalmente exige un fragmento en el cuerpo de la petición. */
 export const isSearchApiResponse =
   (bodyIncludes?: string) =>
   (response: Response): boolean => {
@@ -41,8 +41,8 @@ export async function parseSearchResponse(response: Response): Promise<PlpRecord
 }
 
 /**
- * Price the card shows as the current price (the "discounted" node in the UI).
- * Falls back to salePrice when there is no promo price.
+ * Precio que muestra la tarjeta como precio vigente (el nodo "discounted" en la UI).
+ * Usa salePrice cuando no hay precio promocional.
  */
 export const displayedPrice = (record: PlpRecord): number | undefined =>
   record.priceInfo.promoPrice?.price ?? record.priceInfo.salePrice;

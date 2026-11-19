@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Real Google Chrome: the site's bot protection rejects Playwright's bundled headless Chromium.
+      # Google Chrome real: la protección anti-bot del sitio rechaza el Chromium headless de Playwright.
       - name: Install browsers
         run: |
           npx playwright install --with-deps chrome

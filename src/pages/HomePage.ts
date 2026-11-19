@@ -3,7 +3,7 @@ import { settings } from '../config/settings';
 import { BasePage } from './BasePage';
 
 export class HomePage extends BasePage {
-  // The header renders two inputs (mobile + desktop); only one is visible per viewport.
+  // El header renderiza dos inputs (móvil y escritorio); solo uno es visible según el viewport.
   private readonly searchInput: Locator;
 
   constructor(page: Page) {
@@ -18,9 +18,10 @@ export class HomePage extends BasePage {
   }
 
   /**
-   * The header is server-rendered and then hydrated. Text typed before hydration is
-   * wiped and Enter does nothing, so we retry fill+Enter until the navigation happens.
-   * Each attempt is idempotent (fill replaces the value), so retrying is safe.
+   * El header se renderiza en el servidor y luego se hidrata. El texto escrito antes de la
+   * hidratación se borra y Enter no hace nada, así que se reintenta rellenar y Enter hasta que
+   * ocurra la navegación. Cada intento es idempotente (fill reemplaza el valor), por lo que
+   * reintentar es seguro.
    */
   async search(term: string): Promise<void> {
     await expect(async () => {

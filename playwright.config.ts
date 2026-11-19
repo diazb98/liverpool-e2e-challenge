@@ -3,9 +3,9 @@ import { defineConfig, devices, type Project } from '@playwright/test';
 const isCI = !!process.env.CI;
 
 /**
- * Browsers to run, comma separated. Default: chrome only.
- * The site's bot protection rejects Playwright's bundled headless Chromium, so the
- * "chrome" project drives the real Google Chrome channel instead.
+ * Navegadores a ejecutar, separados por coma. Por defecto: solo chrome.
+ * La protección anti-bot del sitio rechaza el Chromium headless que trae Playwright, así que
+ * el proyecto "chrome" usa el canal de Google Chrome real.
  */
 const requested = (process.env.BROWSERS ?? 'chrome').split(',').map((b) => b.trim());
 
@@ -31,13 +31,13 @@ export default defineConfig({
   ],
 
   use: {
-    // Headless by default. Run headed with `npm run test:headed` (or `--headed`).
+    // Headless por defecto. Para ver el navegador: `npm run test:headed` (o `--headed`).
     headless: true,
     locale: 'es-MX',
     viewport: { width: 1440, height: 900 },
     actionTimeout: 15_000,
     navigationTimeout: 45_000,
-    // Configured here, never in test code:
+    // Se configuran aquí, nunca en el código de las pruebas:
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure',
   },
